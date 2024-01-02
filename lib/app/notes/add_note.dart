@@ -6,9 +6,12 @@ import 'package:notes_api/app/compnants/crud.dart';
 import 'package:notes_api/app/compnants/custom_form_note.dart';
 
 import 'package:notes_api/app/compnants/cutom_button.dart';
+import 'package:notes_api/app/compnants/show_snack_bar.dart';
 import 'package:notes_api/app/compnants/valid_input.dart';
 import 'package:notes_api/constant/api_link.dart';
 import 'package:notes_api/main.dart';
+
+import '../../constant/app_color.dart';
 
 class AddNote extends StatefulWidget {
   const AddNote({super.key});
@@ -22,11 +25,17 @@ class _AddNoteState extends State<AddNote> {
   TextEditingController content = TextEditingController();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   bool _isLoading = false;
+  bool _isImageSelected = false;
   //bool _withImage = false;
   final Crud _crud = Crud();
   File? myFile;
 
-  Future<void> addNoteWithImage() async {
+  Future<void> addNote() async {
+    if (myFile == null) {
+      print("image is note selected successfuly....");
+      showSnackBar(context, "you need to select an image for note");
+      return;
+    }
     if (formState.currentState!.validate()) {
       setState(() {
         _isLoading = true;
@@ -42,35 +51,13 @@ class _AddNoteState extends State<AddNote> {
 
       if (response['status'] == "success") {
         _isLoading = false;
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          "homePage",
-          (route) => false,
-        );
-        print('add success ===========');
-      } else {
-        print('faild to add note =============');
-      }
-    }
-  }
-
-  Future<void> addNote() async {
-    if (formState.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-      var response = await _crud.postRequest(addNoteLink, {
-        "title": title.text,
-        "content": content.text,
-        "user_id": shardPref.getString("id"),
-      });
-
-      if (response['status'] == "success") {
-        _isLoading = false;
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          "homePage",
-          (route) => false,
-        );
-        print('add success ===========');
+        if (context.mounted) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            "homePage",
+            (route) => false,
+          );
+          print('add success ===========');
+        }
       } else {
         print('faild to add note =============');
       }
@@ -87,8 +74,9 @@ class _AddNoteState extends State<AddNote> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: appBackgroundColor,
       appBar: AppBar(
-        title: const Text("Edit Note"),
+        title: const Text("Add Note"),
         actions: [
           IconButton(
             onPressed: () {
@@ -97,7 +85,7 @@ class _AddNoteState extends State<AddNote> {
                   builder: (context) {
                     return Container(
                       height: 120,
-                      color: Colors.yellow[200],
+                      color: appBackgroundColor,
                       child: Column(
                         children: [
                           const SizedBox(height: 10),
@@ -118,7 +106,10 @@ class _AddNoteState extends State<AddNote> {
                                 onPressed: () async {
                                   XFile? cameraFile = await ImagePicker()
                                       .pickImage(source: ImageSource.camera);
-
+                                  Navigator.of(context).pop();
+                                  setState(() {
+                                    _isImageSelected = true;
+                                  });
                                   myFile = File(cameraFile!.path);
                                 },
                                 icon: const Icon(
@@ -130,11 +121,14 @@ class _AddNoteState extends State<AddNote> {
                                 onPressed: () async {
                                   XFile? gallaryFile = await ImagePicker()
                                       .pickImage(source: ImageSource.gallery);
-
+                                  Navigator.of(context).pop();
+                                  setState(() {
+                                    _isImageSelected = true;
+                                  });
                                   myFile = File(gallaryFile!.path);
                                 },
                                 icon: const Icon(
-                                  Icons.browse_gallery_outlined,
+                                  Icons.image_outlined,
                                   size: 40,
                                 ),
                               ),
@@ -146,14 +140,14 @@ class _AddNoteState extends State<AddNote> {
                     );
                   });
             },
-            icon: const Icon(
-              Icons.image_rounded,
+            icon: Icon(
+              Icons.image_outlined,
+              color: _isImageSelected ? Colors.grey : Colors.black,
             ),
           ),
         ],
       ),
-      body: Container(
-        color: Colors.yellow[200],
+      body: Padding(
         padding: const EdgeInsets.all(20),
         child: Form(
           key: formState,
@@ -193,10 +187,6 @@ class _AddNoteState extends State<AddNote> {
                           txt: 'Add Note',
                           color: Colors.yellow,
                           pressed: () async {
-                            // _withImage
-                            //     ? await addNoteWithImage()
-                            //     : await addNote();
-                            //await addNoteWithImage();
                             await addNote();
                           },
                           txtColor: Colors.black,

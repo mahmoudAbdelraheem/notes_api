@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:notes_api/app/compnants/crud.dart';
 import 'package:notes_api/app/compnants/custom_text_form.dart';
 import 'package:notes_api/app/compnants/cutom_button.dart';
+import 'package:notes_api/app/compnants/show_snack_bar.dart';
 import 'package:notes_api/app/compnants/valid_input.dart';
 import 'package:notes_api/constant/api_link.dart';
+
+import '../../constant/app_color.dart';
+import '../../constant/massage.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -36,11 +40,14 @@ class _SignUpState extends State<SignUp> {
         setState(() {
           isLoading = false;
         });
+
         print("====================== response = ${response['status']}");
         print("====================== response = $response");
+
         if (context.mounted) {
+          showSnackBar(context, signUpMsg);
           Navigator.of(context)
-              .pushNamedAndRemoveUntil("homePage", (route) => false);
+              .pushNamedAndRemoveUntil("login", (route) => false);
         }
       } else {
         print("Sign Up faild...");
@@ -59,8 +66,8 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.yellow[200],
+      backgroundColor: appBackgroundColor,
+      body: Padding(
         padding: const EdgeInsets.all(10),
         child: Form(
           key: formState,

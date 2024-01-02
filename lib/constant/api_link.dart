@@ -9,5 +9,9 @@ const String addNoteLink = "$serverLink/notes/add.php";
 const String deleteNoteLink = "$serverLink/notes/delete.php";
 const String updateNoteLink = "$serverLink/notes/update.php";
 
+//users
+const String viewUserLink = "$serverLink/users/view.php";
+const String updateUserLink = "$serverLink/users/update.php";
+
 // for image path
-const String imageRootLink = "$serverLink/ubload";
+const String imageRootLink = "$serverLink/upload";

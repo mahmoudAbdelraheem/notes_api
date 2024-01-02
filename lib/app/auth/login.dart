@@ -6,6 +6,10 @@ import 'package:notes_api/app/compnants/valid_input.dart';
 import 'package:notes_api/constant/api_link.dart';
 import 'package:notes_api/main.dart';
 
+import '../../constant/app_color.dart';
+import '../../constant/massage.dart';
+import '../compnants/show_snack_bar.dart';
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -40,6 +44,7 @@ class _LoginState extends State<Login> {
         shardPref.setString("email", response['data']['u_email']);
         shardPref.setString("password", response['data']['u_pass']);
         if (context.mounted) {
+          showSnackBar(context, loginMsg);
           Navigator.of(context)
               .pushNamedAndRemoveUntil("homePage", (route) => false);
         }
@@ -62,8 +67,8 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.yellow[200],
+      backgroundColor: appBackgroundColor,
+      body: Padding(
         padding: const EdgeInsets.all(10),
         child: Form(
           key: formState,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_api/app/models/notes_model.dart';
+import 'package:notes_api/constant/api_link.dart';
 
 class NoteCard extends StatelessWidget {
   final NoteModel note;
@@ -30,8 +31,14 @@ class NoteCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(width: 10),
-              Image.asset(
-                img,
+              // Image.asset(
+              //   img,
+              //   height: 50,
+              //   width: 50,
+              //   fit: BoxFit.fill,
+              // ),
+              Image.network(
+                "$imageRootLink/${note.noteImage}",
                 height: 50,
                 width: 50,
                 fit: BoxFit.fill,

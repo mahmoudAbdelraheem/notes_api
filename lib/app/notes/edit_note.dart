@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_api/constant/api_link.dart';
+import 'package:notes_api/constant/app_color.dart';
 
 import '../compnants/crud.dart';
 import '../compnants/custom_form_note.dart';
@@ -73,11 +74,11 @@ class _EditNoteState extends State<EditNote> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: appBackgroundColor,
       appBar: AppBar(
         title: const Text("Update Note"),
       ),
-      body: Container(
-        color: Colors.yellow[200],
+      body: Padding(
         padding: const EdgeInsets.all(20),
         child: Form(
           key: formState,

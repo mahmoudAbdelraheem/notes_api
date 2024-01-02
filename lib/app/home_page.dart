@@ -8,6 +8,8 @@ import 'package:notes_api/app/notes/edit_note.dart';
 import 'package:notes_api/constant/api_link.dart';
 import 'package:notes_api/main.dart';
 
+import '../constant/app_color.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -21,26 +23,25 @@ class _HomePageState extends State<HomePage> {
     var response = await _crud.postRequest(viewNoteLink, {
       "u_id": shardPref.getString("id"),
     });
+    print("response body is ====== $response");
     return response;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: appBackgroundColor,
       appBar: AppBar(
         title: const Text("your notes"),
         actions: [
           IconButton(
               onPressed: () {
-                shardPref.clear();
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil("login", (route) => false);
+                Navigator.of(context).pushNamed("setting");
               },
-              icon: const Icon(Icons.exit_to_app)),
+              icon: const Icon(Icons.settings)),
         ],
       ),
-      body: Container(
-        color: Colors.yellow[200],
+      body: Padding(
         padding: const EdgeInsets.all(10),
         child: ListView(
           physics: const BouncingScrollPhysics(),

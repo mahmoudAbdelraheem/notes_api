@@ -3,6 +3,7 @@ import 'package:notes_api/app/auth/login.dart';
 import 'package:notes_api/app/auth/sign_up.dart';
 import 'package:notes_api/app/home_page.dart';
 import 'package:notes_api/app/notes/add_note.dart';
+import 'package:notes_api/app/setting_page.dart';
 
 import 'dart:io';
 
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
         "signUp": (context) => const SignUp(),
         "homePage": (context) => const HomePage(),
         "addNote": (context) => const AddNote(),
+        "setting": (context) => const SettingPage(),
       },
     );
   }
