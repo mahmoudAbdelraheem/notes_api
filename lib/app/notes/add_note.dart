@@ -6,7 +6,7 @@ import 'package:notes_api/app/compnants/crud.dart';
 import 'package:notes_api/app/compnants/custom_form_note.dart';
 
 import 'package:notes_api/app/compnants/cutom_button.dart';
-import 'package:notes_api/app/compnants/show_snack_bar.dart';
+
 import 'package:notes_api/app/compnants/valid_input.dart';
 import 'package:notes_api/constant/api_link.dart';
 import 'package:notes_api/main.dart';
@@ -26,21 +26,27 @@ class _AddNoteState extends State<AddNote> {
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _isImageSelected = false;
-  //bool _withImage = false;
   final Crud _crud = Crud();
   File? myFile;
 
   Future<void> addNote() async {
-    if (myFile == null) {
-      print("image is note selected successfuly....");
-      showSnackBar(context, "you need to select an image for note");
-      return;
-    }
-    if (formState.currentState!.validate()) {
+    var response;
+    // add note without image
+    if (myFile == null && formState.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
-      var response = await _crud.postRequestWithImage(
+      response = await _crud.postRequest(addNoteLink, {
+        "title": title.text,
+        "content": content.text,
+        "user_id": shardPref.getString("id"),
+      });
+      // add note with image
+    } else if (myFile != null && formState.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+      response = await _crud.postRequestWithImage(
           addNoteLink,
           {
             "title": title.text,
@@ -48,19 +54,18 @@ class _AddNoteState extends State<AddNote> {
             "user_id": shardPref.getString("id"),
           },
           myFile!);
-
-      if (response['status'] == "success") {
-        _isLoading = false;
-        if (context.mounted) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            "homePage",
-            (route) => false,
-          );
-          print('add success ===========');
-        }
-      } else {
-        print('faild to add note =============');
+    }
+    if (response != null && response['status'] == "success") {
+      _isLoading = false;
+      if (context.mounted) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          "homePage",
+          (route) => false,
+        );
+        print('add success ===========');
       }
+    } else {
+      print('faild to add note =============');
     }
   }
 
@@ -106,7 +111,9 @@ class _AddNoteState extends State<AddNote> {
                                 onPressed: () async {
                                   XFile? cameraFile = await ImagePicker()
                                       .pickImage(source: ImageSource.camera);
-                                  Navigator.of(context).pop();
+                                  if (context.mounted) {
+                                    Navigator.of(context).pop();
+                                  }
                                   setState(() {
                                     _isImageSelected = true;
                                   });
@@ -121,7 +128,10 @@ class _AddNoteState extends State<AddNote> {
                                 onPressed: () async {
                                   XFile? gallaryFile = await ImagePicker()
                                       .pickImage(source: ImageSource.gallery);
-                                  Navigator.of(context).pop();
+                                  if (context.mounted) {
+                                    Navigator.of(context).pop();
+                                  }
+
                                   setState(() {
                                     _isImageSelected = true;
                                   });

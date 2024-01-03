@@ -80,12 +80,8 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => EditNote(
-                                      title: snapshot.data['data'][index]
-                                          ['note_title'],
-                                      content: snapshot.data['data'][index]
-                                          ['note_content'],
-                                      id: snapshot.data['data'][index]
-                                          ['note_id'],
+                                      note: NoteModel.fromJson(
+                                          snapshot.data['data'][index]),
                                     ),
                                   ),
                                 );
@@ -95,6 +91,8 @@ class _HomePageState extends State<HomePage> {
                                     await _crud.postRequest(deleteNoteLink, {
                                   "note_id": snapshot.data['data'][index]
                                       ['note_id'],
+                                  "image_name": snapshot.data['data'][index]
+                                      ['note_image'],
                                 });
                                 if (response != null &&
                                     response['status'] == 'success') {

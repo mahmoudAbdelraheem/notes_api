@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:notes_api/app/models/notes_model.dart';
 import 'package:notes_api/constant/api_link.dart';
 import 'package:notes_api/constant/app_color.dart';
 
@@ -8,14 +12,10 @@ import '../compnants/cutom_button.dart';
 import '../compnants/valid_input.dart';
 
 class EditNote extends StatefulWidget {
-  final String title;
-  final String content;
-  final String id;
+  final NoteModel note;
   const EditNote({
     super.key,
-    required this.title,
-    required this.content,
-    required this.id,
+    required this.note,
   });
 
   @override
@@ -27,6 +27,7 @@ class _EditNoteState extends State<EditNote> {
   TextEditingController content = TextEditingController();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   bool _isLoading = false;
+  File? myFile;
   final Crud _crud = Crud();
 
   Future<void> editNote() async {
@@ -35,11 +36,25 @@ class _EditNoteState extends State<EditNote> {
         _isLoading = true;
       });
 
-      var response = await _crud.postRequest(updateNoteLink, {
-        "new_title": title.text,
-        "new_content": content.text,
-        "note_id": widget.id,
-      });
+      var response;
+      if (myFile == null) {
+        response = await _crud.postRequest(updateNoteLink, {
+          "new_title": title.text,
+          "new_content": content.text,
+          "note_image": widget.note.noteImage,
+          "note_id": widget.note.noteId,
+        });
+      } else {
+        response = await _crud.postRequestWithImage(
+            updateNoteLink,
+            {
+              "new_title": title.text,
+              "new_content": content.text,
+              "note_image": widget.note.noteImage,
+              "note_id": widget.note.noteId,
+            },
+            myFile!);
+      }
 
       if (response != null && response['status'] == "success") {
         _isLoading = false;
@@ -58,8 +73,8 @@ class _EditNoteState extends State<EditNote> {
 
   @override
   void initState() {
-    title.text = widget.title;
-    content.text = widget.content;
+    title.text = widget.note.noteTitle;
+    content.text = widget.note.noteContent;
 
     super.initState();
   }
@@ -77,6 +92,71 @@ class _EditNoteState extends State<EditNote> {
       backgroundColor: appBackgroundColor,
       appBar: AppBar(
         title: const Text("Update Note"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      height: 120,
+                      color: appBackgroundColor,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 10),
+                          const Text(
+                            "Choose Image From :",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              const SizedBox(width: 5),
+                              IconButton(
+                                onPressed: () async {
+                                  XFile? cameraFile = await ImagePicker()
+                                      .pickImage(source: ImageSource.camera);
+                                  Navigator.of(context).pop();
+
+                                  myFile = File(cameraFile!.path);
+                                },
+                                icon: const Icon(
+                                  Icons.camera_alt_outlined,
+                                  size: 40,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  XFile? gallaryFile = await ImagePicker()
+                                      .pickImage(source: ImageSource.gallery);
+                                  Navigator.of(context).pop();
+
+                                  myFile = File(gallaryFile!.path);
+                                },
+                                icon: const Icon(
+                                  Icons.image_outlined,
+                                  size: 40,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  });
+            },
+            icon: const Icon(
+              Icons.image_outlined,
+              color: Colors.black,
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),

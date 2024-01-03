@@ -1,4 +1,4 @@
-const String serverLink = "https://192.168.1.6/notesapp";
+const String serverLink = "http://192.168.1.6/notesapp";
 
 //link for signup and login page auth
 const String signUpLink = "$serverLink/auth/signup.php";
