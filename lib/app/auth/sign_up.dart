@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_api/app/compnants/crud.dart';
+import 'package:notes_api/app/compnants/custom_password_field.dart';
 import 'package:notes_api/app/compnants/custom_text_form.dart';
 import 'package:notes_api/app/compnants/cutom_button.dart';
 import 'package:notes_api/app/compnants/show_snack_bar.dart';
@@ -41,7 +42,6 @@ class _SignUpState extends State<SignUp> {
           isLoading = false;
         });
 
-        print("====================== response = ${response['status']}");
         print("====================== response = $response");
 
         if (context.mounted) {
@@ -50,7 +50,9 @@ class _SignUpState extends State<SignUp> {
               .pushNamedAndRemoveUntil("login", (route) => false);
         }
       } else {
-        print("Sign Up faild...");
+        if (context.mounted) {
+          showSnackBar(context, 'Sign Up faild...');
+        }
       }
     }
   }
@@ -89,49 +91,51 @@ class _SignUpState extends State<SignUp> {
                     hint: 'name',
                     controller: nameController,
                     keyType: TextInputType.name,
-                    isPassword: false,
                   ),
                   const SizedBox(height: 10),
                   CustomTextForm(
                     hint: 'email',
                     controller: emailController,
                     keyType: TextInputType.emailAddress,
-                    isPassword: false,
                     valid: (val) {
                       return validInput(val!, 5, 30);
                     },
                   ),
                   const SizedBox(height: 10),
-                  CustomTextForm(
-                    hint: 'password',
+                  CustomPassowrdField(
+                    hint: "password",
                     controller: passwordController,
                     keyType: TextInputType.text,
-                    isPassword: true,
                     valid: (val) {
                       return validInput(val!, 5, 20);
                     },
                   ),
                   const SizedBox(height: 50),
                   isLoading
-                      ? const CircularProgressIndicator(
-                          color: Colors.orange,
+                      ? CircularProgressIndicator(
+                          color: indicatorColor,
                         )
                       : CustomBotton(
                           txt: "Sign Up",
-                          color: Colors.black,
+                          buttonColor: buttonBackgrounColor!,
                           pressed: () async {
                             await signUpFunc();
                           },
-                          txtColor: Colors.white,
+                          txtColor: textButtonColor!,
                         ),
-                  const SizedBox(height: 10),
-                  CustomBotton(
-                    txt: "Login",
-                    color: Colors.yellow,
-                    pressed: () {
+                  const SizedBox(height: 25),
+                  InkWell(
+                    onTap: () {
                       Navigator.of(context).pushReplacementNamed("login");
                     },
-                    txtColor: Colors.black,
+                    child: Text(
+                      "Login Now",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: textColor,
+                      ),
+                    ),
                   ),
                 ],
               ),

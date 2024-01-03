@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:notes_api/constant/app_color.dart';
 
 class CustomTextForm extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
   final TextInputType keyType;
-  final bool isPassword;
+
   final String? Function(String?)? valid;
 
   const CustomTextForm({
@@ -12,7 +13,6 @@ class CustomTextForm extends StatelessWidget {
     required this.hint,
     required this.controller,
     required this.keyType,
-    required this.isPassword,
     required this.valid,
   });
 
@@ -24,11 +24,10 @@ class CustomTextForm extends StatelessWidget {
         validator: valid,
         controller: controller,
         keyboardType: keyType,
-        obscureText: isPassword,
         cursorColor: Colors.black,
         decoration: InputDecoration(
           filled: true,
-          fillColor: Colors.yellow[200],
+          fillColor: appBackgroundColor,
           hintText: hint,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 8, horizontal: 20),

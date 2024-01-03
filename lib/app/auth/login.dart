@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_api/app/compnants/crud.dart';
+import 'package:notes_api/app/compnants/custom_password_field.dart';
 import 'package:notes_api/app/compnants/custom_text_form.dart';
 import 'package:notes_api/app/compnants/cutom_button.dart';
 import 'package:notes_api/app/compnants/valid_input.dart';
@@ -52,7 +53,9 @@ class _LoginState extends State<Login> {
         setState(() {
           _isLoading = false;
         });
-        print("login faild=============");
+        if (context.mounted) {
+          showSnackBar(context, "Login Faild...");
+        }
       }
     }
   }
@@ -90,39 +93,42 @@ class _LoginState extends State<Login> {
                     hint: 'email',
                     controller: emailController,
                     keyType: TextInputType.emailAddress,
-                    isPassword: false,
                   ),
                   const SizedBox(height: 10),
-                  CustomTextForm(
+                  CustomPassowrdField(
+                    hint: "passowrd",
+                    controller: passwordController,
+                    keyType: TextInputType.visiblePassword,
                     valid: (val) {
                       return validInput(val!, 5, 20);
                     },
-                    hint: 'password',
-                    controller: passwordController,
-                    keyType: TextInputType.text,
-                    isPassword: true,
                   ),
                   const SizedBox(height: 50),
                   _isLoading
-                      ? const CircularProgressIndicator(
-                          color: Colors.orange,
+                      ? CircularProgressIndicator(
+                          color: indicatorColor,
                         )
                       : CustomBotton(
                           txt: "Login",
-                          color: Colors.black,
+                          buttonColor: buttonBackgrounColor!,
                           pressed: () async {
                             await logInFunc();
                           },
-                          txtColor: Colors.white,
+                          txtColor: textButtonColor!,
                         ),
-                  const SizedBox(height: 10),
-                  CustomBotton(
-                    txt: "Sign Up?",
-                    color: Colors.yellow,
-                    pressed: () {
+                  const SizedBox(height: 25),
+                  InkWell(
+                    onTap: () {
                       Navigator.of(context).pushReplacementNamed("signUp");
                     },
-                    txtColor: Colors.black,
+                    child: Text(
+                      "Sign Up?",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: textColor,
+                      ),
+                    ),
                   ),
                 ],
               ),

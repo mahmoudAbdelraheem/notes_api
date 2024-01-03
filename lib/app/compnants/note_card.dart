@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_api/app/models/notes_model.dart';
 import 'package:notes_api/constant/api_link.dart';
+import 'package:notes_api/constant/app_color.dart';
 
 class NoteCard extends StatelessWidget {
   final NoteModel note;
@@ -24,7 +25,7 @@ class NoteCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        color: Colors.yellow[300],
+        color: noteCardColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Row(

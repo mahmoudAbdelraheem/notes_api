@@ -4,6 +4,7 @@ import 'package:notes_api/app/auth/sign_up.dart';
 import 'package:notes_api/app/home_page.dart';
 import 'package:notes_api/app/notes/add_note.dart';
 import 'package:notes_api/app/setting_page.dart';
+import 'package:notes_api/constant/app_color.dart';
 
 import 'dart:io';
 
@@ -29,16 +30,16 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter PHP API Text',
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(
+        appBarTheme: AppBarTheme(
           elevation: 2,
-          backgroundColor: Colors.yellow,
+          backgroundColor: appBarColor,
           titleTextStyle: TextStyle(
-            color: Colors.black,
+            color: textColor,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
           iconTheme: IconThemeData(
-            color: Colors.black,
+            color: iconsColor,
             size: 30,
           ),
         ),

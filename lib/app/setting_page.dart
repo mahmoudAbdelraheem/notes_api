@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_api/app/compnants/crud.dart';
+import 'package:notes_api/app/compnants/custom_password_field.dart';
 import 'package:notes_api/app/compnants/custom_text_form.dart';
 import 'package:notes_api/app/compnants/cutom_button.dart';
 import 'package:notes_api/app/compnants/show_snack_bar.dart';
@@ -55,10 +56,11 @@ class _SettingPageState extends State<SettingPage> {
             "login",
             (route) => false,
           );
-          print("user data updated successfuly=========");
         }
       } else {
-        print("error in update user data ==============");
+        if (newContext.mounted) {
+          showSnackBar(newContext, "error in update data");
+        }
       }
     } else {
       showSnackBar(newContext, "Enter New Data");
@@ -109,7 +111,7 @@ class _SettingPageState extends State<SettingPage> {
                 const SizedBox(height: 50),
                 CircleAvatar(
                   radius: 50,
-                  backgroundColor: Colors.black,
+                  backgroundColor: buttonBackgrounColor,
                   child: Icon(
                     Icons.person,
                     color: appBackgroundColor,
@@ -121,7 +123,6 @@ class _SettingPageState extends State<SettingPage> {
                   hint: 'name',
                   controller: name,
                   keyType: TextInputType.name,
-                  isPassword: false,
                   valid: (val) {
                     return validInput(val!, 3, 10);
                   },
@@ -131,35 +132,33 @@ class _SettingPageState extends State<SettingPage> {
                   hint: 'email',
                   controller: email,
                   keyType: TextInputType.emailAddress,
-                  isPassword: false,
                   valid: (val) {
                     return validInput(val!, 5, 30);
                   },
                 ),
                 const SizedBox(height: 5),
-                CustomTextForm(
-                  hint: 'password',
+                CustomPassowrdField(
+                  hint: "password",
                   controller: pass,
                   keyType: TextInputType.visiblePassword,
-                  isPassword: true,
                   valid: (val) {
                     return validInput(val!, 5, 20);
                   },
                 ),
                 const SizedBox(height: 15),
                 _isLoading
-                    ? const Center(
+                    ? Center(
                         child: CircularProgressIndicator(
-                          color: Colors.orange,
+                          color: indicatorColor,
                         ),
                       )
                     : CustomBotton(
                         txt: 'Update Data',
-                        color: Colors.black,
+                        buttonColor: buttonBackgrounColor!,
                         pressed: () {
                           updateUsreData(context);
                         },
-                        txtColor: appBackgroundColor!,
+                        txtColor: textButtonColor!,
                       ),
               ],
             )

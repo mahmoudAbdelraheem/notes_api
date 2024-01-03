@@ -52,14 +52,14 @@ class _HomePageState extends State<HomePage> {
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data['status'] == 'falid') {
-                      return const Column(
+                      return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             "Add New Note Now!",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: textColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 24,
                             ),
@@ -96,8 +96,11 @@ class _HomePageState extends State<HomePage> {
                                 });
                                 if (response != null &&
                                     response['status'] == 'success') {
-                                  Navigator.of(context).pushNamedAndRemoveUntil(
-                                      'homePage', (route) => false);
+                                  if (context.mounted) {
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                            'homePage', (route) => false);
+                                  }
                                 }
                               },
                             );
@@ -105,15 +108,15 @@ class _HomePageState extends State<HomePage> {
                     }
                   } else if (snapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return const Center(
+                    return Center(
                       child: CircularProgressIndicator(
-                        color: Colors.orange,
+                        color: indicatorColor,
                       ),
                     );
                   }
-                  return const Center(
+                  return Center(
                     child: CircularProgressIndicator(
-                      color: Colors.orange,
+                      color: indicatorColor,
                     ),
                   );
                 }),
@@ -121,13 +124,13 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
+        backgroundColor: floatingActionColor,
         onPressed: () {
           Navigator.of(context).pushNamed("addNote");
         },
-        child: const Icon(
+        child: Icon(
           Icons.note_add_outlined,
-          color: Colors.black,
+          color: iconsColor,
         ),
       ),
     );

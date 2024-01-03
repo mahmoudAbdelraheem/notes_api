@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:notes_api/app/compnants/show_snack_bar.dart';
 import 'package:notes_api/app/models/notes_model.dart';
 import 'package:notes_api/constant/api_link.dart';
 import 'package:notes_api/constant/app_color.dart';
@@ -64,9 +65,13 @@ class _EditNoteState extends State<EditNote> {
             (route) => false,
           );
         }
-        print('add success ===========');
+        if (context.mounted) {
+          showSnackBar(context, 'note updated successfuly');
+        }
       } else {
-        print('faild to add note =============');
+        if (context.mounted) {
+          showSnackBar(context, 'faild to update note');
+        }
       }
     }
   }
@@ -104,12 +109,12 @@ class _EditNoteState extends State<EditNote> {
                       child: Column(
                         children: [
                           const SizedBox(height: 10),
-                          const Text(
+                          Text(
                             "Choose Image From :",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                              color: textColor,
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -121,26 +126,31 @@ class _EditNoteState extends State<EditNote> {
                                 onPressed: () async {
                                   XFile? cameraFile = await ImagePicker()
                                       .pickImage(source: ImageSource.camera);
-                                  Navigator.of(context).pop();
+                                  if (context.mounted) {
+                                    Navigator.of(context).pop();
+                                  }
 
                                   myFile = File(cameraFile!.path);
                                 },
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.camera_alt_outlined,
                                   size: 40,
+                                  color: iconsColor,
                                 ),
                               ),
                               IconButton(
                                 onPressed: () async {
                                   XFile? gallaryFile = await ImagePicker()
                                       .pickImage(source: ImageSource.gallery);
-                                  Navigator.of(context).pop();
-
+                                  if (context.mounted) {
+                                    Navigator.of(context).pop();
+                                  }
                                   myFile = File(gallaryFile!.path);
                                 },
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.image_outlined,
                                   size: 40,
+                                  color: iconsColor,
                                 ),
                               ),
                               const SizedBox(width: 5),
@@ -151,9 +161,9 @@ class _EditNoteState extends State<EditNote> {
                     );
                   });
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.image_outlined,
-              color: Colors.black,
+              color: iconsColor,
             ),
           ),
         ],
@@ -189,17 +199,17 @@ class _EditNoteState extends State<EditNote> {
                   ),
                   const SizedBox(height: 5),
                   _isLoading
-                      ? const Center(
+                      ? Center(
                           child: CircularProgressIndicator(
-                          color: Colors.orange,
+                          color: indicatorColor,
                         ))
                       : CustomBotton(
                           txt: 'Update Note',
-                          color: Colors.yellow,
+                          buttonColor: buttonBackgrounColor!,
                           pressed: () async {
                             await editNote();
                           },
-                          txtColor: Colors.black,
+                          txtColor: textButtonColor!,
                         ),
                 ],
               ),

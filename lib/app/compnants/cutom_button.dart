@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class CustomBotton extends StatelessWidget {
   final String txt;
-  final Color color;
+  final Color buttonColor;
   final Color txtColor;
   final void Function() pressed;
   const CustomBotton(
       {super.key,
       required this.txt,
-      required this.color,
+      required this.buttonColor,
       required this.pressed,
       required this.txtColor});
 
@@ -21,7 +21,7 @@ class CustomBotton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
-        color: color,
+        color: buttonColor,
         onPressed: pressed,
         child: Text(
           txt,

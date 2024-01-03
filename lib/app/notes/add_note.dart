@@ -6,6 +6,7 @@ import 'package:notes_api/app/compnants/crud.dart';
 import 'package:notes_api/app/compnants/custom_form_note.dart';
 
 import 'package:notes_api/app/compnants/cutom_button.dart';
+import 'package:notes_api/app/compnants/show_snack_bar.dart';
 
 import 'package:notes_api/app/compnants/valid_input.dart';
 import 'package:notes_api/constant/api_link.dart';
@@ -62,10 +63,13 @@ class _AddNoteState extends State<AddNote> {
           "homePage",
           (route) => false,
         );
-        print('add success ===========');
+
+        showSnackBar(context, "note add successfuly");
       }
     } else {
-      print('faild to add note =============');
+      if (context.mounted) {
+        showSnackBar(context, "faild to add note");
+      }
     }
   }
 
@@ -94,12 +98,12 @@ class _AddNoteState extends State<AddNote> {
                       child: Column(
                         children: [
                           const SizedBox(height: 10),
-                          const Text(
+                          Text(
                             "Choose Image From :",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                              color: textColor,
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -119,9 +123,10 @@ class _AddNoteState extends State<AddNote> {
                                   });
                                   myFile = File(cameraFile!.path);
                                 },
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.camera_alt_outlined,
                                   size: 40,
+                                  color: iconsColor,
                                 ),
                               ),
                               IconButton(
@@ -137,9 +142,10 @@ class _AddNoteState extends State<AddNote> {
                                   });
                                   myFile = File(gallaryFile!.path);
                                 },
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.image_outlined,
                                   size: 40,
+                                  color: iconsColor,
                                 ),
                               ),
                               const SizedBox(width: 5),
@@ -152,7 +158,7 @@ class _AddNoteState extends State<AddNote> {
             },
             icon: Icon(
               Icons.image_outlined,
-              color: _isImageSelected ? Colors.grey : Colors.black,
+              color: _isImageSelected ? Colors.grey : iconsColor,
             ),
           ),
         ],
@@ -189,17 +195,17 @@ class _AddNoteState extends State<AddNote> {
                   ),
                   const SizedBox(height: 5),
                   _isLoading
-                      ? const Center(
+                      ? Center(
                           child: CircularProgressIndicator(
-                          color: Colors.orange,
+                          color: indicatorColor,
                         ))
                       : CustomBotton(
                           txt: 'Add Note',
-                          color: Colors.yellow,
+                          buttonColor: buttonBackgrounColor!,
                           pressed: () async {
                             await addNote();
                           },
-                          txtColor: Colors.black,
+                          txtColor: textButtonColor!,
                         ),
                 ],
               ),

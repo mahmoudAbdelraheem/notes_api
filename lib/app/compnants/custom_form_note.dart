@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_api/constant/app_color.dart';
 
 // ignore: must_be_immutable
 class CustomFormNote extends StatelessWidget {
@@ -34,7 +35,7 @@ class CustomFormNote extends StatelessWidget {
         cursorColor: Colors.black,
         decoration: InputDecoration(
           filled: true,
-          fillColor: Colors.yellow[200],
+          fillColor: appBackgroundColor,
           hintText: hint,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
