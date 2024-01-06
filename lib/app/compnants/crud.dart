@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:path/path.dart';
 
 // ignore: prefer_interpolation_to_compose_strings
-String _basicAuth = 'Basic ' + base64Encode(utf8.encode('memo:mmoud2031@'));
+String _basicAuth = 'Basic ' + base64Encode(utf8.encode('memo:mahmoud'));
 
 Map<String, String> myHeaders = {
   'authorization': _basicAuth,
